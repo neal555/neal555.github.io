@@ -21,7 +21,6 @@
     "eject": "react-scripts eject",
     "build-image": "docker build -t f-test:dev .",
     "dev": "docker run -itd --rm -v ${PWD}:/app -v /app/node_modules  -p 3001:3000 -e CHOKIDAR_USEPOLLING=true  f-test:dev",
-    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
