@@ -80,7 +80,7 @@ function App() {
         />
       ) : (
         <div className="app-content">
-          <Pane>
+          <Pane title={<h1>Countries</h1>}>
             {countries.map((item) => (
               <Item
                 key={item.code}
@@ -95,7 +95,7 @@ function App() {
           </Pane>
 
           <Pane>{currentSelected && <CardInfo item={currentSelected} />}</Pane>
-          <Pane>
+          <Pane title={<h1>History</h1>}>
             {history.map((item) => (
               <HistoryItem
                 key={item.code}

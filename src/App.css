@@ -32,3 +32,9 @@
     overflow: scroll;
   }
 }
+
+h1 {
+  color: #455a64;
+  font-size: 30px;
+  margin: auto;
+}
