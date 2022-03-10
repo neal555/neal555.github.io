@@ -1,8 +1,15 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "./App";
 
-test("renders App", () => {
+test("renders App", async () => {
   render(<App />);
-  const linkElement = screen.getByText(/F Test/i);
-  expect(linkElement).toBeInTheDocument();
+  const topBar = screen.getByText(/F Test/i);
+  expect(topBar).toBeInTheDocument();
+  await waitFor(() => screen.findByTestId("data"), {
+    timeout: 10000,
+    onTimeout: () => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    },
+  });
+  expect(screen.getByTestId("data")).toHaveTextContent("Countries");
 });

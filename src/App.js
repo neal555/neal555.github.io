@@ -81,6 +81,7 @@ function App() {
         <Loading />
       ) : error ? (
         <Error
+          role="alert"
           onRetry={() => {
             setLoading(true);
             setError(false);
@@ -88,7 +89,7 @@ function App() {
           }}
         />
       ) : (
-        <div className="app-content">
+        <div className="app-content" data-testid={"data"}>
           <Pane title={<h1>Countries</h1>}>
             {countries.map((item) => (
               <Item
