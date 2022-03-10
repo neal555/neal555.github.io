@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import {
@@ -10,6 +11,7 @@ import {
   TopBar,
 } from "./components";
 import axios from "axios";
+import BinIcon from "./assets/binIcon.svg";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -17,10 +19,29 @@ function App() {
   const [countries, setCountries] = useState([]);
   const [currentSelected, setCurrentSelected] = useState(null);
   const [history, setHistory] = useState([]);
+  const [searchField, setSearchField] = useState("");
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     getCountries();
   }, []);
+
+  useEffect(() => {
+    setList(countries);
+  }, [countries]);
+
+  useEffect(() => {
+    if (searchField.length > 0) {
+      const filteredCountries = countries.filter((country) => {
+        return country.name
+          .toLowerCase()
+          .startsWith(searchField.trim().toLowerCase());
+      });
+      setList(filteredCountries);
+    } else {
+      setList(countries);
+    }
+  }, [searchField]);
 
   const getCountries = async () => {
     try {
@@ -73,6 +94,9 @@ function App() {
       setHistory(newHistory);
     }
   };
+  const handleChange = (e) => {
+    setSearchField(e.target.value);
+  };
 
   return (
     <div className="App">
@@ -90,22 +114,52 @@ function App() {
         />
       ) : (
         <div className="app-content" data-testid={"data"}>
-          <Pane title={<h1>Countries</h1>}>
-            {countries.map((item) => (
-              <Item
-                key={item.code}
-                flag={item?.flag ?? null}
-                name={item?.name ?? null}
-                onClick={() => {
-                  setCurrentSelected(item);
-                  addToHistory(item);
-                }}
-              />
-            ))}
+          <Pane
+            title={
+              <div className="countries-header">
+                <h1>Countries</h1>
+                <input
+                  className="search-input"
+                  type="search"
+                  placeholder="Search countries"
+                  onChange={handleChange}
+                />
+              </div>
+            }
+          >
+            {list.length > 0 ? (
+              list.map((item) => (
+                <Item
+                  key={item.code}
+                  flag={item?.flag ?? null}
+                  name={item?.name ?? null}
+                  onClick={() => {
+                    setCurrentSelected(item);
+                    addToHistory(item);
+                  }}
+                />
+              ))
+            ) : (
+              <p className="no-data">There are no countries</p>
+            )}
           </Pane>
 
           <Pane>{currentSelected && <CardInfo item={currentSelected} />}</Pane>
-          <Pane title={<h1>History</h1>}>
+          <Pane
+            title={
+              <div className="history-header">
+                <h1>History</h1>
+                {history.length > 0 && (
+                  <img
+                    className="bin-icon"
+                    onClick={() => setHistory([])}
+                    src={BinIcon}
+                    alt="binIcon"
+                  />
+                )}
+              </div>
+            }
+          >
             {history.map((item) => (
               <HistoryItem
                 key={item.code}
